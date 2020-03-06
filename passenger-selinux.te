@@ -1,0 +1,75 @@
+
+module myapp 1.0;
+
+require {
+	type httpd_t;
+	type fixed_disk_device_t;
+	type http_port_t;
+	type httpd_tmp_t;
+	type httpd_sys_script_exec_t;
+	type rpm_var_lib_t;
+	type configfs_t;
+	type user_tmp_t;
+	type usr_t;
+	type postgresql_port_t;
+	type init_t;
+	type httpd_sys_content_t;
+	class capability { fowner fsetid sys_ptrace sys_resource };
+	class process ptrace;
+	class tcp_socket name_connect;
+	class blk_file getattr;
+	class dir { add_name create getattr read remove_name rmdir write };
+	class sock_file getattr;
+	class fifo_file { append create getattr ioctl open read setattr unlink write };
+	class file { append create map rename setattr unlink write };
+}
+
+#============= httpd_t ==============
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t configfs_t:dir getattr;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t fixed_disk_device_t:blk_file getattr;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t http_port_t:tcp_socket name_connect;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t httpd_sys_content_t:dir { add_name create remove_name write };
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t httpd_sys_content_t:file { append create rename setattr unlink write };
+allow httpd_t httpd_sys_script_exec_t:dir write;
+allow httpd_t httpd_sys_script_exec_t:file append;
+
+#!!!! This avc is allowed in the current policy
+#!!!! This av rule may have been overridden by an extended permission av rule
+allow httpd_t httpd_tmp_t:fifo_file { append create getattr ioctl open read setattr unlink write };
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t postgresql_port_t:tcp_socket name_connect;
+allow httpd_t rpm_var_lib_t:dir write;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t rpm_var_lib_t:file map;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t self:capability { fowner fsetid sys_ptrace sys_resource };
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t self:process ptrace;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t user_tmp_t:sock_file getattr;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t usr_t:dir create;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t usr_t:file { create rename write };
+
+#============= init_t ==============
+
+#!!!! This avc is allowed in the current policy
+allow init_t httpd_tmp_t:dir { read remove_name rmdir write };
