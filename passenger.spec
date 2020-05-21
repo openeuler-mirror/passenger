@@ -6,7 +6,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.4
-Release: 2
+Release: 3
 License: Boost and BSD and BSD with advertising and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -189,5 +189,8 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Mon May 18 2020 wangchen <wangchen137@huawei.com> - 6.0.4-3
+- rebuild for passenger
+
 * Wed Mar 4 2020 openEuler Buildteam <buildteam@openeuler.org> - 6.0.4-2
-- Package Init
+- Package Init- Package Init
