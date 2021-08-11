@@ -5,7 +5,7 @@
 
 Name:passenger
 Summary: Phusion Passenger application server
-Version: 6.0.7
+Version: 6.0.8
 Release: 1
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
@@ -189,6 +189,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Tue Aug 10 2021 yixiangzhike <zhangxingliang3@huawei.com> - 6.0.8-1
+- update version to 6.0.8
+
 * Sat Jan 23 2021 zoulin <zoulin13@huawei.com> - 6.0.7-1
 - update version to 6.0.7
 
