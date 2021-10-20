@@ -6,7 +6,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 1
+Release: 2
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -91,7 +91,7 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-rake fakeroot \
+rake -m fakeroot \
     NATIVE_PACKAGING_METHOD=rpm \
     FS_PREFIX=%{_prefix} \
     FS_BINDIR=%{_bindir} \
@@ -189,6 +189,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Tue Oct 19 2021 zhangweiguo <zhangweiguo2@huawei.com> - 6.0.8-2
+- add rake option -m
+
 * Tue Aug 10 2021 yixiangzhike <zhangxingliang3@huawei.com> - 6.0.8-1
 - update version to 6.0.8
 
