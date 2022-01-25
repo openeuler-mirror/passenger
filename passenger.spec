@@ -6,7 +6,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 1
+Release: 2
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -19,9 +19,9 @@ Source102: passenger.tmpfiles
 
 Requires: rubygems rubygem(rack) rubygem(rake) ruby(release)
 
-BuildRequires: gcc, gcc-c++ httpd-devel ruby ruby-devel rubygems rubygems-devel
+BuildRequires: gcc gcc-c++ httpd-devel ruby ruby-devel rubygems rubygems-devel
 BuildRequires: rubygem(rake) >= 0.8.1 rubygem(rack) zlib-devel pcre-devel
-BuildRequires: openssl-devel libcurl-devel jsoncpp-devel
+BuildRequires: openssl-devel libcurl-devel jsoncpp-devel perl
 
 Provides: bundled(boost)  = 1.69.0
 
@@ -189,6 +189,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Tue Jan 25 2022 panxiaohe <panxiaohe@huawei.com> - 6.0.8-2
+- add BuildRequires: perl to fix build failure
+
 * Tue Aug 10 2021 yixiangzhike <zhangxingliang3@huawei.com> - 6.0.8-1
 - update version to 6.0.8
 
