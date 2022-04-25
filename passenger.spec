@@ -6,7 +6,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 2
+Release: 3
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -21,7 +21,7 @@ Requires: rubygems rubygem(rack) rubygem(rake) ruby(release)
 
 BuildRequires: gcc, gcc-c++ httpd-devel ruby ruby-devel rubygems rubygems-devel
 BuildRequires: rubygem(rake) >= 0.8.1 rubygem(rack) zlib-devel pcre-devel
-BuildRequires: openssl-devel libcurl-devel jsoncpp-devel
+BuildRequires: openssl-devel libcurl-devel jsoncpp-devel perl
 
 Provides: bundled(boost)  = 1.69.0
 
@@ -189,6 +189,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Mon Apr 25 2022 caodongxia<caodongxia@h-partners.com> - 6.0.8-3
+- add buildRequires to resolve compilation failure
+
 * Tue Oct 19 2021 zhangweiguo <zhangweiguo2@huawei.com> - 6.0.8-2
 - add rake option -m
 
