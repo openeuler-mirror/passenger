@@ -6,7 +6,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 2
+Release: 3
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -16,6 +16,8 @@ Source11: passenger-selinux.te
 Source100: apache-passenger.conf.in
 Source101: apache-passenger-module.conf
 Source102: passenger.tmpfiles
+
+Patch01: 0001-add-riscv64-to-configure.patch
 
 Requires: rubygems rubygem(rack) rubygem(rake) ruby(release)
 
@@ -72,7 +74,7 @@ BuildArch: noarch
 This package contains documentation files for Phusion Passenger®.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -n %{name}-%{version} -p1
 
 %build
 export EXTRA_CFLAGS="${CFLAGS:-%optflags} -Wno-deprecated"
@@ -189,6 +191,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Mon Apr 25 2022 wujie <wujie@nj.iscas.ac.cn> - 6.0.8-3
+- add riscv64 to config.guess from https://github.com/gcc-mirror/gcc/blob/master/config.guess
+
 * Tue Jan 25 2022 panxiaohe <panxiaohe@huawei.com> - 6.0.8-2
 - add BuildRequires: perl to fix build failure
 
