@@ -1,0 +1,28 @@
+diff --git a/src/cxx_supportlib/vendor-copy/libuv/config.guess b/src/cxx_supportlib/vendor-copy/libuv/config.guess
+index 6c32c86..2401ba8 100644
+--- a/src/cxx_supportlib/vendor-copy/libuv/config.guess
++++ b/src/cxx_supportlib/vendor-copy/libuv/config.guess
+@@ -1002,6 +1002,9 @@ EOF
+     ppcle:Linux:*:*)
+ 	echo powerpcle-unknown-linux-${LIBC}
+ 	exit ;;
++	riscv32:Linux:*:* | riscv32be:Linux:*:* | riscv64:Linux:*:* | riscv64be:Linux:*:*)
++	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux-${LIBC}
+ 	exit ;;
+diff --git a/src/cxx_supportlib/vendor-modified/libev/config.guess b/src/cxx_supportlib/vendor-modified/libev/config.guess
+index 1f5c50c..9a91219 100644
+--- a/src/cxx_supportlib/vendor-modified/libev/config.guess
++++ b/src/cxx_supportlib/vendor-modified/libev/config.guess
+@@ -1001,6 +1001,9 @@ EOF
+     ppcle:Linux:*:*)
+ 	echo powerpcle-unknown-linux-${LIBC}
+ 	exit ;;
++	riscv32:Linux:*:* | riscv32be:Linux:*:* | riscv64:Linux:*:* | riscv64be:Linux:*:*)
++	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux-${LIBC}
+ 	exit ;;
