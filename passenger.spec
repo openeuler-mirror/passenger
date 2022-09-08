@@ -6,7 +6,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 2
+Release: 3
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -17,10 +17,10 @@ Source100: apache-passenger.conf.in
 Source101: apache-passenger-module.conf
 Source102: passenger.tmpfiles
 
-Requires: rubygems rubygem(rack) rubygem(rake) ruby(release)
+Requires: rubygems <= 2.7.7 obs-bundled-gems <= 2.10.2 ruby(release)
 
-BuildRequires: gcc gcc-c++ httpd-devel ruby ruby-devel rubygems rubygems-devel
-BuildRequires: rubygem(rake) >= 0.8.1 rubygem(rack) zlib-devel pcre-devel
+BuildRequires: gcc gcc-c++ httpd-devel ruby <= 2.5.9 ruby-devel <= 2.5.9 rubygems <= 2.7.7 rubygems-devel <= 2.7.7
+BuildRequires: obs-bundled-gems <= 2.10.2 rubygem(rake) <= 12.3.1 zlib-devel pcre-devel
 BuildRequires: openssl-devel libcurl-devel jsoncpp-devel perl
 
 Provides: bundled(boost)  = 1.69.0
@@ -189,6 +189,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Tue Sep 06 2022 xiangyuning <xiangyuning@huawei.com> - 6.0.8-3
+- add multi version branch for obs-server
+
 * Tue Jan 25 2022 panxiaohe <panxiaohe@huawei.com> - 6.0.8-2
 - add BuildRequires: perl to fix build failure
 
