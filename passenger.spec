@@ -2,11 +2,14 @@
 %{!?_httpd_confdir:     %{expand: %%global _httpd_confdir     %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_modconfdir:  %{expand: %%global _httpd_modconfdir  %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_moddir:      %{expand: %%global _httpd_moddir      %%{_libdir}/httpd/modules}}
+%{!?ruby_vendorlibdir: %global ruby_vendorlibdir %(ruby -rrbconfig -e 'puts RbConfig::CONFIG["vendorlibdir"]')}
+%{!?ruby_vendorarchdir: %global ruby_vendorarchdir %(ruby -rrbconfig -e 'puts RbConfig::CONFIG["vendorarchdir"]')}
+%global passenger_ruby_libdir %{ruby_vendorlibdir}
 
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 3
+Release: 4
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -99,8 +102,8 @@ rake -m fakeroot \
     FS_DATADIR=%{_datadir} \
     FS_LIBDIR=%{_libdir} \
     FS_DOCDIR=%{_docdir} \
-    RUBYLIBDIR=%{_datadir}/passenger \
-    RUBYARCHDIR=%{_libdir}/passenger \
+    RUBYLIBDIR=%{ruby_vendorlibdir} \
+    RUBYARCHDIR=%{ruby_vendorarchdir} \
     APACHE2_MODULE_PATH=%{_httpd_moddir}/mod_passenger.so
 
 
@@ -117,6 +120,10 @@ export LC_ALL=en_US.UTF-8
 %{__sed} -e 's|@PASSENGERROOT@|%{_datadir}/passenger/phusion_passenger/locations.ini|g' %{SOURCE100} > passenger.conf
 %{__sed} -i -e '/^# *Require all granted/d' passenger.conf
 
+./dev/install_scripts_bootstrap_code.rb --ruby %{passenger_ruby_libdir} \
+    %{buildroot}%{_bindir}/* \
+    %{buildroot}%{_sbindir}/* \
+    `find %{buildroot} -name rack_handler.rb`
 
 %if "%{_httpd_modconfdir}" == "%{_httpd_confdir}"
     %{__cat} %{SOURCE101} passenger.conf > passenger-combined.conf
@@ -150,7 +157,7 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 
 %files
 %doc LICENSE CONTRIBUTORS CHANGELOG
-%{_bindir}/%{name}*
+%{_bindir}/*
 %exclude %{_bindir}/%{name}-install-*-module
 %{_sbindir}/*
 %{_usr}/lib/tmpfiles.d/passenger.conf
@@ -166,9 +173,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %dir %{_localstatedir}/log/passenger-analytics
 %dir %attr(755, root, root) %{_localstatedir}/run/passenger-instreg
 %{_sysconfdir}/logrotate.d/passenger
-%{_datadir}/passenger/*
+%{passenger_ruby_libdir}/*
 %{_libdir}/passenger/support-binaries
-%{_libdir}/passenger/passenger_native_support.so
+%{ruby_vendorarchdir}/passenger_native_support.so
 
 %files devel
 %{_datadir}/passenger/ngx_http_passenger_module
@@ -189,6 +196,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Sat Sep 10 2022 yangchenguang <yangchenguang@uniontech.com> - 6.0.8-4
+- fix passenger load error
+
 * Mon Apr 25 2022 caodongxia<caodongxia@h-partners.com> - 6.0.8-3
 - add buildRequires to resolve compilation failure
 
