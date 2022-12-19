@@ -9,7 +9,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 3
+Release: 4
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -78,6 +78,9 @@ This package contains documentation files for Phusion Passenger®.
 %autosetup -n %{name}-%{version}
 
 %build
+%ifarch loongarch64
+%configure || :
+%endif
 export EXTRA_CFLAGS="${CFLAGS:-%optflags} -Wno-deprecated"
 export EXTRA_CXXFLAGS="${CXXFLAGS:-%optflags} -Wno-deprecated"
 
@@ -196,6 +199,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Tue Dec 13 2022 huajingyun <huajingyun@loongson.cn> - 6.0.8-4
+- fix passenger build error for loongarch64
+
 * Wed Sep 21 2022 yaoxin <yaoxin30@h-partners.com> - 6.0.8-3
 - fix passenger load error
 
