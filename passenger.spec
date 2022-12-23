@@ -2,14 +2,11 @@
 %{!?_httpd_confdir:     %{expand: %%global _httpd_confdir     %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_modconfdir:  %{expand: %%global _httpd_modconfdir  %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_moddir:      %{expand: %%global _httpd_moddir      %%{_libdir}/httpd/modules}}
-%{!?ruby_vendorlibdir: %global ruby_vendorlibdir %(ruby -rrbconfig -e 'puts RbConfig::CONFIG["vendorlibdir"]')}
-%{!?ruby_vendorarchdir: %global ruby_vendorarchdir %(ruby -rrbconfig -e 'puts RbConfig::CONFIG["vendorarchdir"]')}
-%global passenger_ruby_libdir %{ruby_vendorlibdir}
 
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 3
+Release: 4
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -20,10 +17,10 @@ Source100: apache-passenger.conf.in
 Source101: apache-passenger-module.conf
 Source102: passenger.tmpfiles
 
-Requires: rubygems rubygem(rack) rubygem(rake) ruby(release)
+Requires: rubygems <= 2.7.7 obs-bundled-gems = 2.10.2 ruby(release)
 
-BuildRequires: gcc gcc-c++ httpd-devel ruby ruby-devel rubygems rubygems-devel
-BuildRequires: rubygem(rake) >= 0.8.1 rubygem(rack) zlib-devel pcre-devel
+BuildRequires: gcc gcc-c++ httpd-devel ruby <= 2.5.9 ruby-devel <= 2.5.9 rubygems <= 2.7.7 rubygems-devel <= 2.7.7
+BuildRequires: obs-bundled-gems = 2.10.2 rubygem(rake) <= 12.3.1 zlib-devel pcre-devel
 BuildRequires: openssl-devel libcurl-devel jsoncpp-devel perl
 
 Provides: bundled(boost)  = 1.69.0
@@ -102,8 +99,8 @@ rake fakeroot \
     FS_DATADIR=%{_datadir} \
     FS_LIBDIR=%{_libdir} \
     FS_DOCDIR=%{_docdir} \
-    RUBYLIBDIR=%{ruby_vendorlibdir} \
-    RUBYARCHDIR=%{ruby_vendorarchdir} \
+    RUBYLIBDIR=%{_datadir}/passenger \
+    RUBYARCHDIR=%{_libdir}/passenger \
     APACHE2_MODULE_PATH=%{_httpd_moddir}/mod_passenger.so
 
 
@@ -120,10 +117,6 @@ export LC_ALL=en_US.UTF-8
 %{__sed} -e 's|@PASSENGERROOT@|%{_datadir}/passenger/phusion_passenger/locations.ini|g' %{SOURCE100} > passenger.conf
 %{__sed} -i -e '/^# *Require all granted/d' passenger.conf
 
-./dev/install_scripts_bootstrap_code.rb --ruby %{passenger_ruby_libdir} \
-    %{buildroot}%{_bindir}/* \
-    %{buildroot}%{_sbindir}/* \
-    `find %{buildroot} -name rack_handler.rb`
 
 %if "%{_httpd_modconfdir}" == "%{_httpd_confdir}"
     %{__cat} %{SOURCE101} passenger.conf > passenger-combined.conf
@@ -157,7 +150,7 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 
 %files
 %doc LICENSE CONTRIBUTORS CHANGELOG
-%{_bindir}/*
+%{_bindir}/%{name}*
 %exclude %{_bindir}/%{name}-install-*-module
 %{_sbindir}/*
 %{_usr}/lib/tmpfiles.d/passenger.conf
@@ -173,9 +166,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %dir %{_localstatedir}/log/passenger-analytics
 %dir %attr(755, root, root) %{_localstatedir}/run/passenger-instreg
 %{_sysconfdir}/logrotate.d/passenger
-%{passenger_ruby_libdir}/*
+%{_datadir}/passenger/*
 %{_libdir}/passenger/support-binaries
-%{ruby_vendorarchdir}/passenger_native_support.so
+%{_libdir}/passenger/passenger_native_support.so
 
 %files devel
 %{_datadir}/passenger/ngx_http_passenger_module
@@ -196,6 +189,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Fri Dec 23 2022 xiangyuning <xiangyuning@huawei.com> - 6.0.8-4
+- add multi version branch for obs-server
+
 * Wed Sep 21 2022 yaoxin <yaoxin30@h-partners.com> - 6.0.8-3
 - fix passenger load error
 
