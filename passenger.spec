@@ -8,12 +8,12 @@
 
 Name:passenger
 Summary: Phusion Passenger application server
-Version: 6.0.8
-Release: 5
+Version: 6.0.17
+Release: 1
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
-Source: http://s3.amazonaws.com/phusion-passenger/releases/%{name}-%{version}.tar.gz
+Source: http://github.com/phusion/passenger/archive/refs/tags/release-6.0.17.tar.gz
 Source10: passenger.logrotate
 Source11: passenger-selinux.te
 Source100: apache-passenger.conf.in
@@ -26,7 +26,7 @@ BuildRequires: gcc, gcc-c++ httpd-devel ruby ruby-devel rubygems rubygems-devel
 BuildRequires: rubygem(rake) >= 0.8.1 rubygem(rack) zlib-devel pcre-devel
 BuildRequires: openssl-devel libcurl-devel jsoncpp-devel perl
 
-Provides: bundled(boost)  = 1.69.0
+Provides: bundled(boost)  = 1.81.0
 
 Obsoletes: rubygem-passenger < %{version}-%{release}
 Provides:  rubygem-passenger = %{version}-%{release}
@@ -75,7 +75,7 @@ BuildArch: noarch
 This package contains documentation files for Phusion Passenger®.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -n %{name}-release-%{version}
 
 %build
 %ifarch loongarch64
@@ -170,7 +170,6 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_datadir}/passenger/node
 %{_datadir}/passenger/*.types
 %{_datadir}/passenger/*.crt
-%{_datadir}/passenger/*.txt
 %{_datadir}/passenger/*.pem
 %{_datadir}/passenger/*.p12
 %dir %{_localstatedir}/log/passenger-analytics
@@ -199,6 +198,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Mon Apr 17 2023 Ge Wang <wang--ge@126.com> - 6.0.17-1
+- update to version 6.0.17
+
 * Tue Dec 13 2022 huajingyun <huajingyun@loongson.cn> - 6.0.8-5
 - fix passenger build error for loongarch64
 
