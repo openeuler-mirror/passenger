@@ -9,7 +9,7 @@
 Name:passenger
 Summary: Phusion Passenger application server
 Version: 6.0.8
-Release: 5
+Release: 6
 License: Boost and BSD and MIT and zlib
 URL: https://www.phusionpassenger.com
 
@@ -19,6 +19,7 @@ Source11: passenger-selinux.te
 Source100: apache-passenger.conf.in
 Source101: apache-passenger-module.conf
 Source102: passenger.tmpfiles
+Patch0:  update-guess-system.patch
 
 Requires: rubygems rubygem(rack) rubygem(rake) ruby(release)
 
@@ -75,7 +76,7 @@ BuildArch: noarch
 This package contains documentation files for Phusion Passenger®.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %ifarch loongarch64
@@ -199,6 +200,9 @@ sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' %{buildroot}%{_datadir}/p
 %{_mandir}/*/*
 
 %changelog
+* Sat May 13 2023 yoo <sunyuechi@iscas.ac.cn> - 6.0.8-6
+- update config.guess, support riscv
+
 * Tue Dec 13 2022 huajingyun <huajingyun@loongson.cn> - 6.0.8-5
 - fix passenger build error for loongarch64
 
